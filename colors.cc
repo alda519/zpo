@@ -47,6 +47,7 @@ void rgb2hsv(uchar r, uchar g, uchar b, uchar &h, uchar &s, uchar &v) {
     v = cmax * 100; // 255
 }
 
+// TODO: nefunguje, predelat
 void hsv2rgb(uchar h, uchar s, uchar v, uchar &r, uchar &g, uchar &b) {
 
     double      hh, p, q, t, ff;
@@ -117,25 +118,14 @@ void hsl2rgb(uchar h, uchar s, uchar l, uchar &r, uchar &g, uchar &b);
 // CMY
 
 
+void show_rgb(cv::Mat vita, cv::Mat &a, cv::Mat &b, cv::Mat &c) {
 
-/*
-void show_rgb(cv::Mat vita) {
-    cv::Mat a, b, c;
-    a = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    c = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-
-    uchar * data = vita.data;
     uchar * adata = a.data;
     uchar * bdata = b.data;
     uchar * cdata = c.data;
 
     for(int y = 0; y < vita.rows; ++y) {
         for(int x = 0; x < vita.cols; ++x) {
-            uchar r = data[x*vita.step + 3*y+0];
-            uchar g = data[x*vita.step + 3*y+0];
-            uchar b = data[x*vita.step + 3*y+0];
-
             // b
             adata[y*vita.step + 3*x+1] = 0;
             adata[y*vita.step + 3*x+2] = 0;
@@ -148,26 +138,8 @@ void show_rgb(cv::Mat vita) {
         }
     }
 }
-*/
 
-
-int main(int argc, char *argv[]) {
-
-    if(argc < 2)
-        return 1;
-
-    cv::Mat vita;
-
-    // nacist obrazek
-    vita = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    cv::Mat vitove(cv::Size(vita.cols * 4, vita.rows),CV_8UC3);
-    cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0);
-
-    // zprasit obrazek
-    cv::Mat a, b, c;
-    a = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
-    c = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
+void show_hsv(cv::Mat vita, cv::Mat &a, cv::Mat &b, cv::Mat &c) {
 
     uchar * data = vita.data;
     uchar * adata = a.data;
@@ -182,7 +154,7 @@ int main(int argc, char *argv[]) {
 
             uchar h, s, v;
             rgb2hsv(r, g, b, h, s, v);
-            
+
             hsv2rgb(h, 255, 255, r, g, b);
 
             // H
@@ -199,10 +171,40 @@ int main(int argc, char *argv[]) {
             cdata[y*vita.step + 3*x+2] = v;
         }
     }
+}
 
+
+int main(int argc, char *argv[]) {
+
+    if(argc < 2)
+        return 1;
+
+    cv::Mat vita;
+
+    // nacist obrazek
+    vita = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
+    cv::Mat vitove(cv::Size(vita.cols * 4, vita.rows),CV_8UC3);
+    cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0);
+
+    // 3 obrazky
+    cv::Mat a, b, c;
+    a = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
+    b = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
+    c = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
+
+    // zprasit obrazek
+    if(0)
+        show_rgb(vita, a, b, c);
+    else if(1)
+        show_hsv(vita, a, b, c);
+    else
+        ; // atd.
+
+
+    // vytvorit 1 obrazek ze 4
     cv::Rect roi;
     cv::Mat roiImg;
-    
+
     roi = cv::Rect(vita.cols * 0, 0, vita.cols, vita.rows);
     roiImg = vitove(roi);
     a.copyTo(roiImg);
@@ -218,15 +220,6 @@ int main(int argc, char *argv[]) {
     roi = cv::Rect(vita.cols * 3, 0, vita.cols, vita.rows);
     roiImg = vitove(roi);
     vita.copyTo(roiImg);
-
-    /*
-    for(int i = 0; i < 4; ++i) {
-        cv::Rect roi = cv::Rect(vita.cols * i, 0, vita.cols, vita.rows);
-        cv::Mat roiImg = vitove(roi);
-
-        vita.copyTo(roiImg);
-    }
-    */
 
     // zobrazit
     cv::imshow(WINDOW, vitove);
