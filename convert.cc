@@ -123,7 +123,11 @@ void yuv2rgb(uchar y, uchar u, uchar v, uchar &r, uchar &g, uchar &b) {
     b =   y * 1.000 + u * 2.034 + v * 0.000;
 }
 
-// RG TODO
+// RG
+void rgb2rg(uchar r, uchar g, uchar b, uchar &R, uchar &G) {
+    R = 255 * r / (r + g + b + 1);
+    G = 255 * g / (r + g + b + 1);
+}
 
 // CMY
 void rgb2cmy(uchar r, uchar g, uchar b, uchar &c, uchar &m, uchar &y) {

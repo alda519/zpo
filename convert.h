@@ -16,3 +16,5 @@ void yuv2rgb(uchar, uchar, uchar, uchar &, uchar &, uchar &);
 
 void rgb2cmy(uchar, uchar, uchar, uchar &, uchar &, uchar &);
 void cmy2rgb(uchar, uchar, uchar, uchar &, uchar &, uchar &);
+
+void rgb2rg(uchar, uchar, uchar, uchar &, uchar &);

@@ -47,9 +47,9 @@ int main(int argc, char *argv[]) {
     //cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0); TODO vratit
 
 
-    int model = 0;
+    int model = MODEL_RB;
 
-    while(model < MODEL_RB) {
+    while(model <= MODEL_RB) {
         // 3 obrazky
         cv::Mat a, b, c;
         a = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
@@ -67,16 +67,14 @@ int main(int argc, char *argv[]) {
         case MODEL_CMY:
             show_cmy(vita, a, b, c);
             break;
-
         case MODEL_HSL:
-            break;
             show_hsl(vita, a, b, c);
             break;
         case MODEL_YUV: 
             show_yuv(vita, a, b, c);
             break;
         case MODEL_RB:
-            show_rb(vita, a, b, c);
+            show_rg(vita, a, b, c);
             break;
         }
 

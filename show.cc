@@ -155,50 +155,44 @@ void show_yuv(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
             adata[y__*vita.step + 3*x+1] = y;
             adata[y__*vita.step + 3*x+2] = y;
 
-            // u B - Y
+            // u (B - Y)
             bdata[y__*vita.step + 3*x+0] = u;
             bdata[y__*vita.step + 3*x+1] = u;
             bdata[y__*vita.step + 3*x+2] = u;
-            // v
+            // v (R - Y)
             cdata[y__*vita.step + 3*x+0] = v;
             cdata[y__*vita.step + 3*x+1] = v;
             cdata[y__*vita.step + 3*x+2] = v;
         }
     }
 }
-// TODO
-void show_rb(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
-    // rgb sede: 215, 213, 211
+
+void show_rg(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
 
     uchar * adata = am.data;
     uchar * bdata = bm.data;
     uchar * cdata = cm.data;
 
-    uchar r, g, b;
+    uchar r, g;
 
     for(int y = 0; y < vita.rows; ++y) {
         for(int x = 0; x < vita.cols; ++x) {
-            // b - y
-            b = adata[y*vita.step + 3*x+0];
-            g = adata[y*vita.step + 3*x+1] = 0;
-            r = adata[y*vita.step + 3*x+2] = 0;
-            rgb2cmy(r, g, b, adata[y*vita.step + 3*x+2],
-                             adata[y*vita.step + 3*x+1],
-                             adata[y*vita.step + 3*x+0]);
-            // g - m
-            b = bdata[y*vita.step + 3*x+0] = 0;
-            g = bdata[y*vita.step + 3*x+1];
-            r = bdata[y*vita.step + 3*x+2] = 0;
-            rgb2cmy(r, g, b, bdata[y*vita.step + 3*x+2],
-                             bdata[y*vita.step + 3*x+1],
-                             bdata[y*vita.step + 3*x+0]);
-            // r - c
-            b = cdata[y*vita.step + 3*x+0] = 0;
-            g = cdata[y*vita.step + 3*x+1] = 0;
-            r = cdata[y*vita.step + 3*x+2];
-            rgb2cmy(r, g, b, cdata[y*vita.step + 3*x+2],
-                             cdata[y*vita.step + 3*x+1],
-                             cdata[y*vita.step + 3*x+0]);
+            rgb2rg(adata[y*vita.step + 3*x+2],
+                   adata[y*vita.step + 3*x+1],
+                   adata[y*vita.step + 3*x+0], r, g);
+
+            // r
+            adata[y*vita.step + 3*x+0] = r;
+            adata[y*vita.step + 3*x+1] = r;
+            adata[y*vita.step + 3*x+2] = r;
+            // g
+            bdata[y*vita.step + 3*x+0] = g;
+            bdata[y*vita.step + 3*x+1] = g;
+            bdata[y*vita.step + 3*x+2] = g;
+            // seda
+            cdata[y*vita.step + 3*x+0] = 211;
+            cdata[y*vita.step + 3*x+1] = 213;
+            cdata[y*vita.step + 3*x+2] = 215;
         }
     }
 }
