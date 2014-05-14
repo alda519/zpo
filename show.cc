@@ -103,38 +103,38 @@ void show_cmy(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
 // TODO
 void show_hsl(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
 
+    uchar * data = vita.data;
     uchar * adata = am.data;
     uchar * bdata = bm.data;
     uchar * cdata = cm.data;
 
-    uchar r, g, b;
-
     for(int y = 0; y < vita.rows; ++y) {
         for(int x = 0; x < vita.cols; ++x) {
-            // b - y
-            b = adata[y*vita.step + 3*x+0];
-            g = adata[y*vita.step + 3*x+1] = 0;
-            r = adata[y*vita.step + 3*x+2] = 0;
-            rgb2cmy(r, g, b, adata[y*vita.step + 3*x+2],
-                             adata[y*vita.step + 3*x+1],
-                             adata[y*vita.step + 3*x+0]);
-            // g - m
-            b = bdata[y*vita.step + 3*x+0] = 0;
-            g = bdata[y*vita.step + 3*x+1];
-            r = bdata[y*vita.step + 3*x+2] = 0;
-            rgb2cmy(r, g, b, bdata[y*vita.step + 3*x+2],
-                             bdata[y*vita.step + 3*x+1],
-                             bdata[y*vita.step + 3*x+0]);
-            // r - c
-            b = cdata[y*vita.step + 3*x+0] = 0;
-            g = cdata[y*vita.step + 3*x+1] = 0;
-            r = cdata[y*vita.step + 3*x+2];
-            rgb2cmy(r, g, b, cdata[y*vita.step + 3*x+2],
-                             cdata[y*vita.step + 3*x+1],
-                             cdata[y*vita.step + 3*x+0]);
+            uchar b = data[y*vita.step + 3*x+0];
+            uchar g = data[y*vita.step + 3*x+1];
+            uchar r = data[y*vita.step + 3*x+2];
+
+            uchar h, s, l;
+            rgb2hsl(r, g, b, h, s, l);
+
+            hsv2rgb(h, 255, 255, r, g, b);
+
+            // H
+            adata[y*vita.step + 3*x+0] = b;
+            adata[y*vita.step + 3*x+1] = g;
+            adata[y*vita.step + 3*x+2] = r;
+            // S
+            bdata[y*vita.step + 3*x+0] = s;
+            bdata[y*vita.step + 3*x+1] = s;
+            bdata[y*vita.step + 3*x+2] = s;
+            // V
+            cdata[y*vita.step + 3*x+0] = l;
+            cdata[y*vita.step + 3*x+1] = l;
+            cdata[y*vita.step + 3*x+2] = l;
         }
     }
 }
+
 
 void show_yuv(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
 

@@ -107,9 +107,49 @@ void hsv2rgb(uchar h, uchar s, uchar v, uchar &r, uchar &g, uchar &b) {
 
 
 
-// HSL TODO
-void rgb2hsl(uchar r, uchar g, uchar b, uchar &h, uchar &s, uchar &l);
-void hsl2rgb(uchar h, uchar s, uchar l, uchar &r, uchar &g, uchar &b);
+// HSL
+void rgb2hsl(uchar r, uchar g, uchar b, uchar &h, uchar &s, uchar &l) {
+    double R = r / 255.0;
+    double G = g / 255.0;
+    double B = b / 255.0;
+
+    double cmax = std::max(R, std::max(G, B));
+    double cmin = std::min(R, std::min(G, B));
+
+    double H;
+
+    // H
+    if(r > b) {
+        if(r > g) {
+            // r > b, g
+            H = 60.0 * (G - B) / (cmax - cmin);
+        } else {
+            // g > r > b
+            H = 60.0 * ((B - R) / (cmax - cmin) + 2);
+        }
+    } else {
+        if(b > g) {
+            // b > r, g
+            H = 60.0 * ((R - G) / (cmax - cmin) + 4);
+        } else {
+            // g > r > b
+            H = 60.0 * ((B - R) / (cmax - cmin) + 2);
+        }
+    }
+    h = H / 360.0 * 255;
+
+    // L
+    l = (cmax + cmin) / 2 * 255;
+
+    // S
+    if(cmax - cmin == 0)
+        s = 0;
+    else
+        s = (cmax - cmin) / (1 - abs(2*l/255.0 -1)) * 255;
+}
+void hsl2rgb(uchar h, uchar s, uchar l, uchar &r, uchar &g, uchar &b) {
+// TODO
+}
 
 // YUV
 void rgb2yuv(uchar r, uchar g, uchar b, uchar &y, uchar &u, uchar &v) {
@@ -138,4 +178,3 @@ void rgb2cmy(uchar r, uchar g, uchar b, uchar &c, uchar &m, uchar &y) {
 void cmy2rgb(uchar c, uchar m, uchar y, uchar &r, uchar &g, uchar &b) {
     rgb2cmy(c, m, y, r, g, b);
 }
-

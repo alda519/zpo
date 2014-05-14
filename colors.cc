@@ -18,14 +18,16 @@ typedef unsigned char uchar;
 enum {
     MODEL_RGB, // OK
     MODEL_HSV, // OK
-    MODEL_HSL,
-    MODEL_YUV,
+    MODEL_YUV, // skoro OK
     MODEL_CMY, // OK
-    MODEL_RB,
+    MODEL_RB, // OK
+    MODEL_HSL, // OK
+
+    MODELS, // pocitadlo modelu
 };
 
 std::string names[] = {
-    "RGB", "HSV", "HSL", "YUV", "CMY", "RB"
+    "RGB", "HSV", "YUV", "CMY", "RB", "HSL"
 };
 
 
@@ -47,9 +49,9 @@ int main(int argc, char *argv[]) {
     //cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0); TODO vratit
 
 
-    int model = MODEL_RB;
+    int model = MODEL_RGB;
 
-    while(model <= MODEL_RB) {
+    while(1) {
         // 3 obrazky
         cv::Mat a, b, c;
         a = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
@@ -98,11 +100,20 @@ int main(int argc, char *argv[]) {
 
         // zobrazit
         cv::imshow(WINDOW + names[model], vitove); // TODO bez jmena
-        cv::waitKey();
+        int key = cv::waitKey();
+
         cv::destroyWindow(WINDOW + names[model]); // TODO dd
 
         // prepnout na dalsi model
-        model += 1;
+        if(key == 65363) // sipka ->
+            model = (model + 1) % MODELS;
+        else if(key == 65361) // sipka <-
+            model = (model - 1 + MODELS) % MODELS;
+        else if(key == 113 || key == 27) // Q nebo ESC
+            break;
+        else
+            model = (model + 1) % MODELS; // implicitne dalsi
+
     }
 
     return 0;
