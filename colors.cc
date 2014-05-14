@@ -98,6 +98,30 @@ int main(int argc, char *argv[]) {
         roiImg = vitove(roi);
         vita.copyTo(roiImg);
 
+        switch(model) {
+        case MODEL_RGB:
+            cv::putText(vitove, "B", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            cv::putText(vitove, "G", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            cv::putText(vitove, "R", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            show_rgb(vita, a, b, c);
+            break;
+        case MODEL_HSV:
+            show_hsv(vita, a, b, c);
+            break;
+        case MODEL_CMY:
+            show_cmy(vita, a, b, c);
+            break;
+        case MODEL_HSL:
+            show_hsl(vita, a, b, c);
+            break;
+        case MODEL_YUV: 
+            show_yuv(vita, a, b, c);
+            break;
+        case MODEL_RB:
+            show_rg(vita, a, b, c);
+            break;
+        }
+
         // zobrazit
         cv::imshow(WINDOW + names[model], vitove); // TODO bez jmena
         int key = cv::waitKey();
