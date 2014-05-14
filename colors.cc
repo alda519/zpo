@@ -20,14 +20,14 @@ enum {
     MODEL_HSV, // OK
     MODEL_YUV, // skoro OK
     MODEL_CMY, // OK
-    MODEL_RB, // OK
+    MODEL_RG, // OK
     MODEL_HSL, // OK
 
     MODELS, // pocitadlo modelu
 };
 
 std::string names[] = {
-    "RGB", "HSV", "YUV", "CMY", "RB", "HSL"
+    "RGB", "HSV", "YUV", "CMY", "RG", "HSL"
 };
 
 
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     // nacist obrazek
     vita = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
     cv::Mat vitove(cv::Size(vita.cols * 4, vita.rows),CV_8UC3);
-    //cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0); TODO vratit
+    cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0);
 
 
     int model = MODEL_RGB;
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
         case MODEL_YUV: 
             show_yuv(vita, a, b, c);
             break;
-        case MODEL_RB:
+        case MODEL_RG:
             show_rg(vita, a, b, c);
             break;
         }
@@ -98,42 +98,49 @@ int main(int argc, char *argv[]) {
         roiImg = vitove(roi);
         vita.copyTo(roiImg);
 
+        // vypsat na obrazek popisky kanalu
         switch(model) {
         case MODEL_RGB:
-            cv::putText(vitove, "B", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
-            cv::putText(vitove, "G", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
-            cv::putText(vitove, "R", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
-            show_rgb(vita, a, b, c);
+            cv::putText(vitove, "B", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
+            cv::putText(vitove, "G", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
+            cv::putText(vitove, "R", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
             break;
         case MODEL_HSV:
-            show_hsv(vita, a, b, c);
+            cv::putText(vitove, "H", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            cv::putText(vitove, "S", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
+            cv::putText(vitove, "V", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
             break;
         case MODEL_CMY:
-            show_cmy(vita, a, b, c);
+            cv::putText(vitove, "Y", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            cv::putText(vitove, "M", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            cv::putText(vitove, "C", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
             break;
         case MODEL_HSL:
-            show_hsl(vita, a, b, c);
+            cv::putText(vitove, "H", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,0), 2, CV_AA);
+            cv::putText(vitove, "S", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
+            cv::putText(vitove, "L", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(255,255,255), 2, CV_AA);
             break;
         case MODEL_YUV: 
-            show_yuv(vita, a, b, c);
+            cv::putText(vitove, "Y", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,255), 2, CV_AA);
+            cv::putText(vitove, "U", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,255), 2, CV_AA);
+            cv::putText(vitove, "V", cv::Point(vita.cols*2+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,255), 2, CV_AA);
             break;
-        case MODEL_RB:
-            show_rg(vita, a, b, c);
+        case MODEL_RG:
+            cv::putText(vitove, "R", cv::Point(vita.cols*0+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,255), 2, CV_AA);
+            cv::putText(vitove, "G", cv::Point(vita.cols*1+30,30), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.4, cvScalar(0,0,255), 2, CV_AA);
             break;
         }
 
         // zobrazit
-        cv::imshow(WINDOW + names[model], vitove); // TODO bez jmena
+        cv::imshow(WINDOW, vitove);
         int key = cv::waitKey();
-
-        cv::destroyWindow(WINDOW + names[model]); // TODO dd
 
         // prepnout na dalsi model
         if(key == 65363) // sipka ->
             model = (model + 1) % MODELS;
         else if(key == 65361) // sipka <-
             model = (model - 1 + MODELS) % MODELS;
-        else if(key == 113 || key == 27) // Q nebo ESC
+        else if(key == 113 || key == 27) // Q nebo ESC konec
             break;
         else
             model = (model + 1) % MODELS; // implicitne dalsi
