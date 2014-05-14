@@ -147,14 +147,13 @@ void rgb2hsl(uchar r, uchar g, uchar b, uchar &h, uchar &s, uchar &l) {
     else
         s = (cmax - cmin) / (1 - abs(2*l/255.0 -1)) * 255;
 }
-void hsl2rgb(uchar h, uchar s, uchar l, uchar &r, uchar &g, uchar &b) {
-// TODO
-}
+//void hsl2rgb(uchar h, uchar s, uchar l, uchar &r, uchar &g, uchar &b) {
+//}
 
 // YUV
 void rgb2yuv(uchar r, uchar g, uchar b, uchar &y, uchar &u, uchar &v) {
     y =   r * 0.299 + g * 0.587 + b * 0.114;
-    u = - r * 0.147 - g * 0.289 + b * 0.436 + 128;
+    u = - r * 0.147 - g * 0.289 + b * 0.436;
     v =   r * 0.615 - g * 0.515 - b * 0.100;
 }
 void yuv2rgb(uchar y, uchar u, uchar v, uchar &r, uchar &g, uchar &b) {

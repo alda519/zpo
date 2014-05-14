@@ -16,12 +16,12 @@ typedef unsigned char uchar;
 
 
 enum {
-    MODEL_RGB, // OK
-    MODEL_HSV, // OK
-    MODEL_YUV, // skoro OK
-    MODEL_CMY, // OK
-    MODEL_RG, // OK
-    MODEL_HSL, // OK
+    MODEL_RGB,
+    MODEL_HSV,
+    MODEL_YUV,
+    MODEL_CMY,
+    MODEL_RG,
+    MODEL_HSL,
 
     MODELS, // pocitadlo modelu
 };
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     cv::namedWindow(WINDOW, cv::WINDOW_AUTOSIZE * 0);
 
 
-    int model = MODEL_RGB;
+    int model = MODEL_YUV;// MODEL_RGB;
 
     while(1) {
         // 3 obrazky

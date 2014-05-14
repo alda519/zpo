@@ -156,13 +156,13 @@ void show_yuv(cv::Mat vita, cv::Mat &am, cv::Mat &bm, cv::Mat &cm) {
             adata[y__*vita.step + 3*x+2] = y;
 
             // u (B - Y)
-            bdata[y__*vita.step + 3*x+0] = u;
-            bdata[y__*vita.step + 3*x+1] = u;
-            bdata[y__*vita.step + 3*x+2] = u;
+            bdata[y__*vita.step + 3*x+0] = u + 128;
+            bdata[y__*vita.step + 3*x+1] = u + 128;
+            bdata[y__*vita.step + 3*x+2] = u + 128;
             // v (R - Y)
-            cdata[y__*vita.step + 3*x+0] = v;
-            cdata[y__*vita.step + 3*x+1] = v;
-            cdata[y__*vita.step + 3*x+2] = v;
+            cdata[y__*vita.step + 3*x+0] = v + 64;
+            cdata[y__*vita.step + 3*x+1] = v + 64;
+            cdata[y__*vita.step + 3*x+2] = v + 64;
         }
     }
 }
